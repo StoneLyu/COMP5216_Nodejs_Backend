@@ -10,6 +10,8 @@ You can find the Android project [here](https://github.com/StoneLyu/COMP5216_Mob
 
 This backend project is implemented with `KOA` architecture, `MVC` architecture and `RESTful` standards for APIs.
 
+You can find more details at [project report](./COMP5216_Project_Report.pdf)
+
 ### why `KOA` instead of `Express`
 
 - `KOA` chooses `async/await` to handle asynchronous operations. It is better than the `callback` in `Express`.
