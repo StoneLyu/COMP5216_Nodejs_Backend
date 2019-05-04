@@ -1,0 +1,298 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>news details</title>
+    <link rel="stylesheet" href="http://stonelyu.com/web/css/swiper.min.css">
+    <link href="http://stonelyu.com/web/css/bootstrap.min.css" rel="stylesheet" type="text/css">
+    <script src="http://stonelyu.com/web/js/jquery-3.3.1.min.js"></script>
+    <script src="http://stonelyu.com/web/js/bootstrap.min.js"></script>
+    <!--<script src="http://stonelyu.com/web/js/main.js"></script>-->
+
+    <style>
+        html, body {
+            position: relative;
+            height: 100%;
+        }
+        body {
+            background: #eee;
+            font-family: Helvetica Neue, Helvetica, Arial, sans-serif;
+            font-size: 14px;
+            color:#000;
+            margin: 0;
+            padding: 0;
+        }
+        .swiper-container {
+            width: 100%;
+            /*height: 100%;*/
+            /*height: 400px;*/
+        }
+        .swiper-slide {
+            text-align: center;
+            font-size: 18px;
+            background: #fff;
+            /* Center slide text vertically */
+            display: -webkit-box;
+            display: -ms-flexbox;
+            display: -webkit-flex;
+            display: flex;
+            -webkit-box-pack: center;
+            -ms-flex-pack: center;
+            -webkit-justify-content: center;
+            justify-content: center;
+            -webkit-box-align: center;
+            -ms-flex-align: center;
+            -webkit-align-items: center;
+            align-items: center;
+        }
+        #swiper_img {
+            max-height: 400px;
+            width: 100%;
+        }
+    </style>
+
+</head>
+<body>
+<div class="container-fluid" id="container">
+    <div class="card-header">
+        <h1 class="h1 text-center"><%= news[0].title%></h1>
+        <table class="table table-sm text-center">
+            <tr>
+                <td><%= news[0].userInfo[0].userName%></td>
+                <%
+                var dateObj = new Date(news[0].time);
+                var m = dateObj.getMonth() - 0 + 1;
+                var d = dateObj.getFullYear() + "-" + m + "-" + dateObj.getDay() + " "
+                        + dateObj.getHours() + ":" + dateObj.getMinutes() + ":" + dateObj.getSeconds();
+                %>
+                <td><%= d%></td>
+                <% var importDistance = "unknown";
+                    if (news[0].distance != "null") {
+                        importDistance = news[0].distance + " m";
+                }%>
+                <td><%= importDistance%></td>
+            </tr>
+        </table>
+    </div>
+
+    <div class="card" id="swiper_location">
+        <div class="swiper-container">
+            <div class="swiper-wrapper">
+                <!--<div class="swiper-slide">Slide 1</div>-->
+                <% news[0].pictures.forEach(function (value) {  %>
+                    <div class="swiper-slide" ><img id="swiper_img" src="<%= '/img/' + value%>"></div>
+                <% })%>
+            </div>
+            <!-- Add Pagination -->
+            <div class="swiper-pagination"></div>
+            <!-- Add Arrows -->
+            <div class="swiper-button-next"></div>
+            <div class="swiper-button-prev"></div>
+        </div>
+    </div>
+
+    <div class="card">
+        <div class="card-body">
+            <blockquote class="blockquote">
+                <p><%= news[0].content%></p>
+            </blockquote>
+            <button class="btn btn-primary float-right" id="saveButton">save</button>
+            <p class="card-text rounded">
+            <ul class="list-inline">
+                <li class="list-inline-item">
+                    <button class="btn btn-danger" id="disapproval" ><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24"><path d="M19.406 14.442c1.426-.06 2.594-.858 2.594-2.506 0-1-.986-6.373-1.486-8.25-.714-2.689-2.471-3.686-5.009-3.686-2.283 0-4.079.617-5.336 1.158-2.585 1.113-4.665 1.842-8.169 1.842v9.928c3.086.401 6.43.956 8.4 7.744.483 1.66.972 3.328 2.833 3.328 3.448 0 3.005-5.531 2.196-8.814 1.107-.466 2.767-.692 3.977-.744zm-.207-1.992c-2.749.154-5.06 1.013-6.12 1.556.431 1.747.921 3.462.921 5.533 0 2.505-.781 3.666-1.679.574-1.993-6.859-5.057-8.364-8.321-9.113v-6c2.521-.072 4.72-1.041 6.959-2.005 1.731-.745 4.849-1.495 6.416-.614 1.295.836 1.114 1.734.292 1.661l-.771-.032c-.815-.094-.92 1.068-.109 1.141 0 0 1.321.062 1.745.115.976.123 1.028 1.607-.04 1.551-.457-.024-1.143-.041-1.143-.041-.797-.031-.875 1.078-.141 1.172 0 0 .714.005 1.761.099s1.078 1.609-.004 1.563c-.868-.037-1.069-.027-1.069-.027-.75.005-.874 1.028-.141 1.115l1.394.167c1.075.13 1.105 1.526.05 1.585z"/></svg></button>
+                </li>
+                <li class="list-inline-item" ><span id="voteValue"><%= news[0].vote%></span></li>
+                <li class="list-inline-item">
+                    <button class="btn btn-success" id="approval" ><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24"><path d="M21.406 9.558c-1.21-.051-2.87-.278-3.977-.744.809-3.283 1.253-8.814-2.196-8.814-1.861 0-2.351 1.668-2.833 3.329-1.548 5.336-3.946 6.816-6.4 7.401v-.73h-6v12h6v-.904c2.378.228 4.119.864 6.169 1.746 1.257.541 3.053 1.158 5.336 1.158 2.538 0 4.295-.997 5.009-3.686.5-1.877 1.486-7.25 1.486-8.25 0-1.648-1.168-2.446-2.594-2.506zm-17.406 10.442h-2v-8h2v8zm15.896-5.583s.201.01 1.069-.027c1.082-.046 1.051 1.469.004 1.563l-1.761.099c-.734.094-.656 1.203.141 1.172 0 0 .686-.017 1.143-.041 1.068-.056 1.016 1.429.04 1.551-.424.053-1.745.115-1.745.115-.811.072-.706 1.235.109 1.141l.771-.031c.822-.074 1.003.825-.292 1.661-1.567.881-4.685.131-6.416-.614-2.239-.965-4.438-1.934-6.959-2.006v-6c3.264-.749 6.328-2.254 8.321-9.113.898-3.092 1.679-1.931 1.679.574 0 2.071-.49 3.786-.921 5.533 1.061.543 3.371 1.402 6.12 1.556 1.055.059 1.024 1.455-.051 1.584l-1.394.167s-.608 1.111.142 1.116z"/></svg></button>
+                </li>
+            </ul>
+            </p>
+        </div>
+    </div>
+
+
+    <div class="card">
+        <div class="card-body rounded">
+            <h4 class="card-title">Comment</h4>
+            <ul class="list-group" id="commentBody">
+
+            </ul>
+        </div>
+    </div>
+
+    <div class="card">
+        <div class="card-body rounded">
+            <h4 class="card-title">Add Comment</h4>
+            <input id="newsId" name="newsId" style="display: none" value="<%= news[0]._id%>" />
+            <input id="userId" style="display: none" value="<%= news[0].userId%>">
+            <textarea class="card-text col-12 rounded" style="resize: none" id="content"></textarea>
+            <button class="btn btn-primary float-right" id="submitBtn" onclick="submitForm()">Submit</button>
+        </div>
+    </div>
+</div>
+
+<!-- Swiper JS -->
+<script src="http://stonelyu.com/web/js/swiper.min.js"></script>
+
+<!-- Initialize Swiper -->
+<script>
+    var swiper = new Swiper('.swiper-container', {
+        autoHeight: true,
+        pagination: {
+            el: '.swiper-pagination',
+            type: 'fraction',
+        },
+        navigation: {
+            nextEl: '.swiper-button-next',
+            prevEl: '.swiper-button-prev',
+        },
+    });
+</script>
+
+<script>
+    $(document).ready(function () {
+        loadCommentAsync();
+        onDisapprovalClick();
+        onApproval();
+        onSaveClick();
+    });
+
+    var loadCommentAsync = function () {
+        let url = '/api/news/' + "<%= news[0]._id%>" +'/comment';
+        let jqxhr = $.get(url);
+
+        jqxhr.done(function (result) {
+            let content = "";
+
+            result.forEach(function (value) {
+                let dateObj = new Date(value.date);
+                let m = dateObj.getMonth() - 0 + 1;
+                let d = dateObj.getFullYear() + "-" + m + "-" + dateObj.getDay() + " "
+                    + dateObj.getHours() + ":" + dateObj.getMinutes() + ":" + dateObj.getSeconds();
+
+
+                content = content + "<li class=\"list-group-item card-text rounded\">" +
+                    "<ul class=\"list-inline \">" + "<li class=\"list-inline-item\">" +
+                    value.to_user[0].userName + "</li>";
+                // if (value.to_userReply[0].userName != null) {
+                //     content = content + "<li class=\"list-inline-item\">Reply to:" + value.to_userReply[0].userName + "</li>";
+                // }
+
+                content = content + "<li class=\"list-inline-item\">" + d + "</li>" + "</ul>" +
+                    "<p class=\"text-body\">" + value.content +"</p></li>"
+            });
+            $('#commentBody').html(content);
+        });
+
+        jqxhr.fail(function (result) {
+            $('#commentBody').html("comment load failed!");
+        });
+    };
+
+    var onDisapprovalClick = function () {
+        // disapproval click
+        $('#disapproval').on('click', function () {
+            var newsId = $('#newsId').val();
+            var jqxhr = $.post('/api/news/', {newsId: newsId, vote: -1});
+
+            jqxhr.done(function (result) {
+                if (result.nModified === 1){
+                    let val = $('#voteValue').html() - 1;
+                    $('#voteValue').html(val);
+                }
+            });
+
+            jqxhr.fail(function (result) {
+                alert("vote failed, please try again!")
+            });
+        });
+    };
+
+    var onApproval = function () {
+        //approval
+        $('#approval').on('click', function () {
+            var newsId = $('#newsId').val();
+            var jqxhr = $.post('/api/news/', {newsId: newsId, vote: 1});
+
+            jqxhr.done(function (result) {
+                if (result.nModified === 1){
+                    let val = $('#voteValue').html() - 0 + 1;
+                    $('#voteValue').html(val);
+                }
+            });
+
+            jqxhr.fail(function (result) {
+                alert("vote failed, please try again!")
+            });
+        });
+    };
+
+    var onSaveClick = function() {
+        let isSaved = false;
+        $('#saveButton').on('click', function () {
+            let newsId = $('#newsId').val();
+            let userId = $('#userId').val();
+
+            alert(isSaved)
+
+            if (isSaved) {
+                var request = $.ajax({
+                    url: '/api/bookmark',
+                    type: 'DELETE', //method: "delete"
+                    data: {newsId:newsId, userId:userId}
+                });
+                request.done(function (result) {
+                    if (result.bookMarkResult === 2) {
+                        $('#saveButton').html('save');
+                        isSaved = false;
+                    }
+                });
+                request.fail(function (result) {
+                    alert('deleting operation failed!');
+                })
+            } else {
+                var jqxhr = $.post('/api/bookmark', {newsId:newsId, userId:userId});
+
+                jqxhr.done(function (result) {
+                    if (result.bookMarkResult === 2) {
+                        $('#saveButton').html('delete');
+                        isSaved = true;
+                    } else if (result.bookMarkResult === 0) {
+                        alert("you have saved it!");
+                        $('#saveButton').html('delete');
+                        isSaved = true;
+                    }
+                });
+
+                jqxhr.fail(function (result) {
+                    alert(result.bookMarkResult);
+                    alert('saving operation failed!');
+                });
+            }
+        });
+    };
+
+    var submitForm = function () {
+        let newsId = $('#newsId').val();
+        let content = $('#content').val();
+        let userId = $('#userId').val();
+
+        var jqxhr = $.post('/api/comment', {newsId: newsId, content: content, userId:userId});
+
+        jqxhr.done(function (result) {
+            if (result) {
+                $('#content').val("");
+                loadCommentAsync();
+            }
+        });
+
+        jqxhr.fail(function (result) {
+            alert('comment failed!');
+        });
+    }
+</script>
+
+</body>
+</html>

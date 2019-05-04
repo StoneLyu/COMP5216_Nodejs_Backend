@@ -1,0 +1,86 @@
+/api/category/5b99fac2c5fda55c3852ef22/list
+
+/api/news/5b9a16bfc5fda55c3852ef27
+
+/api/news/5b9a16bfc5fda55c3852ef27/comment
+
+/api/user/5b937dfd106afa17dcffd125/news
+/api/user/5b937dfd106afa17dcffd125/bookmarks
+
+
+/api/category/5b99fac2c5fda55c3852ef22/list
+
+/api/category/5b99fac2c5fda55c3852ef22/list/23.146436/113.323568
+
+/api/comment/5b937dfd106afa17dcffd125/5b9a16bfc5fda55c3852ef27/
+
+
+
+
+
+### TODO
+1. cookie的共享，获取，发送等操作
+2. cookie只做验证，所有信息放在session里，cookie提供sessionId即可
+3. cookie和session在何时创建？（登陆的时候吧）
+
+### YOU NEED TO NOTICE:
+0. 前端所有的date都没有改为当地时间
+1. comment.put 中userId是硬编码的，应从cookie中取得 （所有的userId都应从cookie中取得
+2. bookmark put/delete 都有问题
+3. news setNewsVote 有问题，应根据输入 1 和 -1 进行修改
+4. 阅读量自增 （前端 onload 加载 ajax），++++++阅读量显示在详情页
+5. 界面美观 beautify
+6. 上船 （右上角 +）
+7. 手动加新闻
+
+
+//news json content
+[
+  {
+    "_id": "5b9a16bfc5fda55c3852ef27",
+    "title": "test1",
+    "time": "2018-09-13T17:33:20.000Z",
+    "location": {
+      "type": "Point",
+      "coordinates": [
+        113.323568,
+        23.14
+      ]
+    },
+    "content": "fulltexttest123",
+    "pictures": [
+      "1.jpg",
+      "2.jpg"
+    ],
+    "pageView": 1,
+    "vote": 9,
+    "userInfo": [
+      {
+        "userName": "hao"
+      }
+    ],
+    "distance": "800"
+  }
+]
+
+
+<ul class="list-group">
+    <% var dateObj = new Date(comments[0].date);
+    var m = dateObj.getMonth() - 0 + 1;
+    var d = dateObj.getFullYear() + "-" + m + "-" + dateObj.getDay() + " "
+            + dateObj.getHours() + ":" + dateObj.getMinutes() + ":" + dateObj.getSeconds();
+    %>
+    <% comments.forEach(function (value) { %>
+        <li class="list-group-item card-text rounded">
+            <ul class="list-inline ">
+                <li class="list-inline-item col-sm-4"><%= value.userId%></li>
+                <% if (value.replyToId != null) {%>
+                    <li class="list-inline-item col-sm-4 ">Reply to: <%= value.replyToId%></li>
+                <% } else {%>
+                <% } %>
+                <li class="list-inline-item col-sm-4 "><%= d%></li>
+            </ul>
+            <p class="text-body"><%= value.content%></p>
+        </li>
+    <% })%>
+</ul>
